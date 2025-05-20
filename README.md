@@ -41,7 +41,7 @@ Basically, Kubernetes makes sure your Docker containers don’t just run — the
 - Source code (e.g., `app.jar`, `DockerDemoApplication.java`) — Inside `docker-demo/`
 - Screenshot or log of Docker image being pushed — Included in logs (see below)
 - ![img.png](img.png)
-- Link to Docker Hub image: [https://hub.docker.com/r/amaninreallife/docker-demo](https://hub.docker.com/r/amaninreallife/docker-demo)
+- Link to Docker Hub image: [https://hub.docker.com/r/amaninreallife/docker-demo](https://hub.docker.com/layers/amaninreallife/docker-demo/latest/images/sha256-c25054333613fe68156827ef0d9991e03f6c31009aff93dd2071e31ad21162b1)
 
 **Sample Push Log:**
 ```text
