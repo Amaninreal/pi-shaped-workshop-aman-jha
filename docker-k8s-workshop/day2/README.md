@@ -22,15 +22,6 @@ These affinity and toleration settings enable fine-grained control over pod plac
 
 ---
 
-## Submission Checklist
-
-- `deployment.yaml` and `node-affinity.yaml` files  
-- Combined manifest file containing deployment with affinity and tolerations  
-- Screenshots or logs demonstrating running pods and their node placement (`kubectl get pods -o wide`)  
-- Explanation of affinity rules applied (this README section)  
-
----
-
 ## Screenshot / Logs
 
 *Add screenshots or terminal logs here showing pods running and the node they are scheduled on using `kubectl get pods -o wide`.*
