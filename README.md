@@ -26,10 +26,10 @@ These affinity and toleration settings enable fine-grained control over pod plac
 
 *Add screenshots or terminal logs here showing pods running and the node they are scheduled on using `kubectl get pods -o wide`.*
 
-![alt text](image.png)
+![alt text](docker-k8s-workshop/day2/image.png)
 
 *Port forwarding to 8081.*
-![alt text](image-1.png)
+![alt text](docker-k8s-workshop/day2/image-1.png)
 
 *on browser result: [http://localhost:8081/](http://localhost:8081/)*
-![alt text](image-2.png)
+![alt text](docker-k8s-workshop/day2/image-2.png)
