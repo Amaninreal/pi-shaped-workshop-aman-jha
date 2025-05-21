@@ -2,51 +2,34 @@
 
 ## Core Concept Questions
 
-### 1. Why is Docker useful in building and deploying microservices for a real-world product (like an e-commerce or banking app)?
+**1. Why do we set requests and limits for CPU and memory in a production-grade product?**
 
-Docker acts like a smart delivery box that wraps up each microservice with its own tools, settings, and environment. This makes the whole system:
-- **Environment-independent** – it runs the same on a developer’s laptop or on a production server.
-- **Fast to deploy or revert** – each service is packed into an image you can version and roll back anytime.
-- **Easy to manage** – no more dependency clashes; everything needed is inside the container.
-- **Individually scalable** – need more power for search but not for payments? Just scale that one container.
+Setting resource requests and limits helps Kubernetes efficiently allocate cluster resources and ensures application stability. Requests specify the minimum resources a pod needs, aiding the scheduler in placing pods on nodes that can satisfy those requirements. Limits prevent pods from over-consuming resources, protecting the cluster from potential resource starvation and enabling fair resource sharing among workloads. This balance is critical for predictable performance, cost control, and preventing noisy neighbor issues in production environments.
+
+**2. When would a product team apply node affinity in Kubernetes?**
+
+Node affinity is used when workloads require scheduling on specific nodes based on node attributes, such as hardware capabilities, geographic location, or compliance needs. For example, teams might use node affinity to ensure that latency-sensitive applications run on high-performance nodes, or that data-sensitive pods are placed in nodes within specific regulatory zones. It helps optimize resource utilization, enhance performance, and maintain policy compliance.
+
+---
+
+## Affinity Rules Explanation
+
+In this deployment, node affinity rules are applied to strictly schedule pods on nodes labeled with the hostname `minikube`. The configuration uses `requiredDuringSchedulingIgnoredDuringExecution`, which enforces mandatory pod placement only on the targeted node.
+
+The deployment also includes tolerations allowing pods to remain scheduled on nodes that may temporarily become `NotReady` or `Unreachable`, with a toleration timeout of 300 seconds. This ensures pods are not immediately evicted during transient node failures, increasing application resilience.
+
+These affinity and toleration settings enable fine-grained control over pod placement and availability, essential for real-world Kubernetes cluster management where resource optimization and fault tolerance are paramount.
 
 ---
 
-### 2. What is the difference between a Docker image and a container in the context of scaling a web application?
+## Screenshot / Logs
 
-- **Docker Image**: A blueprint or template that contains everything needed to run the application (code, libraries, config).
-- **Docker Container**: A running instance of an image.
+*Add screenshots or terminal logs here showing pods running and the node they are scheduled on using `kubectl get pods -o wide`.*
 
-In scaling:
-- We **create multiple containers** from the same image to handle more load.
-- This ensures uniformity and faster boot times during auto-scaling.
+![alt text](image.png)
 
----
-### 3. How does Kubernetes complement Docker when running a product at scale (e.g., hundreds of containers)?
+*Port forwarding to 8081.*
+![alt text](image-1.png)
 
-Docker is great for packaging and running a single container, but when you have tons of containers running — like in a real-world app — it gets tricky to manage.
-
-That’s where **Kubernetes** steps in. It’s like a smart manager that:
-- Takes care of starting, stopping, and restarting containers automatically.
-- Scales them up or down based on traffic or load.
-- Keeps everything running smoothly with features like self-healing, service discovery, and rolling updates.
-- Spreads containers across nodes efficiently, so resources are used better and apps stay online.
-
-Basically, Kubernetes makes sure your Docker containers don’t just run — they run *well* at scale.
----
-
-## Submission Checklist
-
-- Dockerfile — Present inside `docker-k8s-workshop/day1/docker-demo/`
-- Source code (e.g., `app.jar`, `DockerDemoApplication.java`) — Inside `docker-demo/`
-- Screenshot or log of Docker image being pushed — Included in logs (see below)
-- ![img.png](img.png)
-- Link to Docker Hub image: [https://hub.docker.com/r/amaninreallife/docker-demo](https://hub.docker.com/layers/amaninreallife/docker-demo/latest/images/sha256-c25054333613fe68156827ef0d9991e03f6c31009aff93dd2071e31ad21162b1)
-
-**Sample Push Log:**
-```text
-docker push amaninreallife/docker-demo:latest
-The push refers to repository [docker.io/amaninreallife/docker-demo]
-e95f01abef74: Pushed 
-...
-0.0.1: digest: sha256:c25054333613fe68156827ef0d9991e03f6c31009aff93dd2071e31ad21162b1 size: 1786
+*on browser result: [http://localhost:8081/](http://localhost:8081/)*
+![alt text](image-2.png)
