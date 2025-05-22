@@ -31,6 +31,6 @@ spec:
           tolerationSeconds: 300
       containers:
         - name: my-app-container
-          image: nginx:stable
+          image: amaninreallife/docker-demo:latest
           ports:
-            - containerPort: 80
+            - containerPort: 8080
