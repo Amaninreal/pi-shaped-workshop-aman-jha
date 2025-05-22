@@ -1,4 +1,4 @@
-# Kubernetes Day 2 Exercise: Architecture, Pod Scheduling, and Node Affinity
+# Kubernetes Day 2 Exercise: Aman Jha
 
 ## Core Concept Questions
 
@@ -12,7 +12,7 @@ Node affinity is used when workloads require scheduling on specific nodes based 
 
 ---
 
-## Affinity Rules Explanation
+## Affinity Rules Applied
 
 In this deployment, node affinity rules are applied to strictly schedule pods on nodes labeled with the hostname `minikube`. The configuration uses `requiredDuringSchedulingIgnoredDuringExecution`, which enforces mandatory pod placement only on the targeted node.
 
