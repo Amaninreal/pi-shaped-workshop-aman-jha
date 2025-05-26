@@ -9,7 +9,7 @@
 2. **Exposed and Tested Access**  
    Both services were applied and tested. ClusterIP allows communication within the cluster, NodePort enables external access on the Minikube node.
 
-3. **Created Ingress Resource**  
+3. **Created Ingress Resource**                                                                         
    Configured an Ingress with a path-based rule `/myapp` to route traffic to the ClusterIP service.  
    - Utilized annotation to rewrite incoming request URLs so backend receives the correct path.
 
@@ -40,8 +40,8 @@ Ingress consolidates access by routing multiple services through a single extern
 
 1. **Endpoint via Ingress** - `http://<MinikubeIP>/myapp/hello`
 
-![alt text](image.png)
+![alt text](Screenshots/image.png)
 
 2. **Expose the app on Browser via Nodeport** - `http://<NodeIP>:30080`
 
-![alt text](image1.png)
+![alt text](Screenshots/image1.png)
