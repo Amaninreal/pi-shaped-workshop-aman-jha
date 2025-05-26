@@ -1,35 +1,47 @@
-# Pi-Shaped-Workshop-Aman Jha
+# Day 3: Aman Jha - Networking in Kubernetes & Service Discovery
 
-## Core Concept Questions
+## Tasks Completed
 
-**1. Why do we set requests and limits for CPU and memory in a production-grade product?**
+1. **Created Services**  
+   - **ClusterIP Service:** Exposes the app internally within the cluster on port 80, targeting app container port 8080.  
+   - **NodePort Service:** Exposes the app on a node’s IP at port 30080, routing to container port 8080. This allows external access via `<NodeIP>:30080`.
 
-Setting resource requests and limits helps Kubernetes efficiently allocate cluster resources and ensures application stability. Requests specify the minimum resources a pod needs, aiding the scheduler in placing pods on nodes that can satisfy those requirements. Limits prevent pods from over-consuming resources, protecting the cluster from potential resource starvation and enabling fair resource sharing among workloads. This balance is critical for predictable performance, cost control, and preventing noisy neighbor issues in production environments.
+2. **Exposed and Tested Access**  
+   Both services were applied and tested. ClusterIP allows communication within the cluster, NodePort enables external access on the Minikube node.
 
-**2. When would a product team apply node affinity in Kubernetes?**
-
-Node affinity is used when workloads require scheduling on specific nodes based on node attributes, such as hardware capabilities, geographic location, or compliance needs. For example, teams might use node affinity to ensure that latency-sensitive applications run on high-performance nodes, or that data-sensitive pods are placed in nodes within specific regulatory zones. It helps optimize resource utilization, enhance performance, and maintain policy compliance.
-
----
-
-## Affinity Rules Explanation
-
-In this deployment, node affinity rules are applied to strictly schedule pods on nodes labeled with the hostname `minikube`. The configuration uses `requiredDuringSchedulingIgnoredDuringExecution`, which enforces mandatory pod placement only on the targeted node.
-
-The deployment also includes tolerations allowing pods to remain scheduled on nodes that may temporarily become `NotReady` or `Unreachable`, with a toleration timeout of 300 seconds. This ensures pods are not immediately evicted during transient node failures, increasing application resilience.
-
-These affinity and toleration settings enable fine-grained control over pod placement and availability, essential for real-world Kubernetes cluster management where resource optimization and fault tolerance are paramount.
+3. **Created Ingress Resource**                                                                         
+   Configured an Ingress with a path-based rule `/myapp` to route traffic to the ClusterIP service.  
+   - Utilized annotation to rewrite incoming request URLs so backend receives the correct path.
 
 ---
 
-## Screenshot / Logs
+## URL Paths and Expected Responses
 
-*Add screenshots or terminal logs here showing pods running and the node they are scheduled on using `kubectl get pods -o wide`.*
+| URL Path              | Service Type        | Expected Response                         |
+|-----------------------|---------------------|-------------------------------------------|
+| `http://<NodeIP>:30080` | NodePort            | Access to app landing or root endpoint    |
+| `http://<MinikubeIP>/myapp`  | Ingress (path-based) | Routes to app, handles requests correctly |
+| `http://<MinikubeIP>/myapp/hello`  | api endpoint | Routes to the api endpoint |
 
-![alt text](docker-k8s-workshop/day2/image-5.png)
+---
 
-*expose my day1 app to 8080.*
-![alt text](docker-k8s-workshop/day2/image-4.png)
+## Core Concepts
 
-*on browser result: [http://192.168.49.2:31272/hello](http://192.168.49.2:31272/hello)*
-![alt text](docker-k8s-workshop/day2/image-3.png)
+### 1. Exposing Internal Microservice vs Public Frontend  
+Internal microservices like user-auth should be exposed using **ClusterIP** or private networking, restricting access only inside the cluster for security and internal communication.  
+Public-facing frontends require exposure via **NodePort, LoadBalancer**, or **Ingress** to allow external user access.
+
+### 2. Why Use Ingress Instead of Multiple LoadBalancers?  
+Ingress consolidates access by routing multiple services through a single external IP and domain, reducing cost and complexity. It also enables path or host-based routing, SSL termination, and centralized traffic management, unlike exposing each microservice with separate LoadBalancer services.
+
+---
+
+## Screenshots
+
+1. **Endpoint via Ingress** - `http://<MinikubeIP>/myapp/hello`
+
+![alt text](docker-k8s-workshop/day3/Screenshots/image.png)
+
+2. **Expose the app on Browser via Nodeport** - `http://<NodeIP>:30080`
+
+![alt text](docker-k8s-workshop/day3/Screenshots/image1.png)
