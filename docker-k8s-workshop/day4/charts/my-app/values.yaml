@@ -1,0 +1,43 @@
+replicaCount: 2
+
+image:
+  repository: amaninreallife/docker-demo
+  tag: latest
+  pullPolicy: IfNotPresent
+
+containerPort: 8080
+
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "250m"
+  limits:
+    memory: "256Mi"
+    cpu: "500m"
+
+nodeAffinity:
+  key: kubernetes.io/hostname
+  operator: In
+  values:
+    - minikube
+
+tolerations:
+  - key: "node.kubernetes.io/not-ready"
+    operator: "Exists"
+    effect: "NoExecute"
+    tolerationSeconds: 300
+  - key: "node.kubernetes.io/unreachable"
+    operator: "Exists"
+    effect: "NoExecute"
+    tolerationSeconds: 300
+
+service:
+  type: ClusterIP
+  port: 80
+  nodePort: 30080
+
+ingress:
+  enabled: true
+  path: /my-app
+  serviceName: my-app-clusterip
+  servicePort: 80

@@ -66,7 +66,7 @@ During a product update, a new microservice version causes unexpected crashes. I
     helm upgrade --install my-app ./charts/my-app
     ```
 
-    ![Helm Install](docker-k8s-workshop/day4/Screenshots/image.png)
+    ![Helm Install](Screenshots/image.png)
 
 2. **Kubectl Get All Resources Labeled**:
 
@@ -74,11 +74,11 @@ During a product update, a new microservice version causes unexpected crashes. I
     kubectl get all -l app.kubernetes.io/instance=my-app
     ```
 
-    ![K8s Resources](docker-k8s-workshop/day4/Screenshots/image1.png)
+    ![K8s Resources](Screenshots/image1.png)
 
 3. **Helm Templates**:
 
-    ![Helm Template](docker-k8s-workshop/day4/Screenshots/image3.png)
+    ![Helm Template](Screenshots/image3.png)
 
 4. **Helm Upgrade Command Output**
 
@@ -86,7 +86,7 @@ During a product update, a new microservice version causes unexpected crashes. I
     helm upgrade my-app ./charts/my-app --set replicaCount=3 --set image.tag=1.1
     ```
 
-    ![Helm Upgrade](docker-k8s-workshop/day4/Screenshots/image2.png)
+    ![Helm Upgrade](Screenshots/image2.png)
 
 5. **Kubectl Get Deployment Showing Updated Replicas or Image**:
 
@@ -94,7 +94,7 @@ During a product update, a new microservice version causes unexpected crashes. I
     kubectl get deployment my-app-my-app -o wide
     ```
 
-    ![Deployment Update](docker-k8s-workshop/day4/Screenshots/image4.png)
+    ![Deployment Update](Screenshots/image4.png)
 
 6. **Helm History**
 
@@ -102,4 +102,6 @@ During a product update, a new microservice version causes unexpected crashes. I
     helm history my-app
     ```
 
-    ![Helm History](docker-k8s-workshop/day4/Screenshots/image5.png)
+    ![Helm History](Screenshots/image5.png)
+
+
