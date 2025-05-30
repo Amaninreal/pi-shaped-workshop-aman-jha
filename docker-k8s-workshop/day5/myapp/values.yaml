@@ -1,0 +1,48 @@
+frontend:
+  replicaCount: 2
+  image:
+    repository: amaninreallife/k8s-frontend
+    tag: latest
+    pullPolicy: Always                            
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "300m"
+      memory: "256Mi"
+  hpa:
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 60
+
+backend:
+  replicaCount: 2
+  image:
+    repository: amaninreallife/docker-demo
+    tag: latest
+    pullPolicy: Always
+  containerPort: 8080
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  hpa:
+    minReplicas: 2
+    maxReplicas: 6
+    targetCPUUtilizationPercentage: 60
+
+  service:
+    type: NodePort     # Change to ClusterIP if needed
+    nodePort: 30081    # Optional, only used if type is NodePort
+
+ingress:
+  enabled: false
+
+# Optional: remove this if not used by frontend
+# service:
+#   type: ClusterIP
+#   port: 80
