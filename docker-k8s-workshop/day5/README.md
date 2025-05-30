@@ -58,5 +58,4 @@ During Black Friday flash sales, the frontend and backend services experience su
 ## Screenshots
 
 1. **Scaling Event Screenshot**  
-![HPA](Screenshots/image.png)
-![Scaling Event](image1.png)
+![Scaling Event](Screenshots/image.png)
