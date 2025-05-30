@@ -3,7 +3,7 @@
 ## Tasks Completed
 
 1. **Created a 2-tier Application**  
-   - Frontend and backend deployed using raw Kubernetes manifests with appropriate resource requests and limits.  
+   - Frontend and backend deployed using helm manifests with appropriate resource requests and limits.  
 2. **Implemented Probes**  
    - Added liveness and readiness probes to ensure pod health and readiness before receiving traffic.  
 3. **Configured Horizontal Pod Autoscaler (HPA)**  
@@ -58,4 +58,5 @@ During Black Friday flash sales, the frontend and backend services experience su
 ## Screenshots
 
 1. **Scaling Event Screenshot**  
+
 ![Scaling Event](Screenshots/image.png)

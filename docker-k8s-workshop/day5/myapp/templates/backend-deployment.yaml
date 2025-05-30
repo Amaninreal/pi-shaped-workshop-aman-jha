@@ -25,3 +25,23 @@ spec:
           limits:
             cpu: {{ .Values.backend.resources.limits.cpu }}
             memory: {{ .Values.backend.resources.limits.memory }}
+
+        livenessProbe:
+          httpGet:
+            path: /healthz      
+            port: 8080           
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+
+        readinessProbe:
+          httpGet:
+            path: /readyz       
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3

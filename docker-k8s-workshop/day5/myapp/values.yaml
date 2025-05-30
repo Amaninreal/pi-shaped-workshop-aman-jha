@@ -30,6 +30,13 @@ backend:
     limits:
       cpu: "500m"
       memory: "512Mi"
+  probes:
+    liveness:
+      path: /healthz
+      port: 8080
+    readiness:
+      path: /readyz
+      port: 8080
   hpa:
     minReplicas: 2
     maxReplicas: 6
