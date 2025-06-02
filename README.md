@@ -1,105 +1,62 @@
-# Day 4 Exercise: Aman Jha - Helm Charts and Custom Helm Templates
-
-## Objective
-Demonstrate the ability to package an application using Helm and implement configuration options using `values.yaml` for flexible and reusable deployments.
-
----
+# Day 5: Aman Jha - Kubernetes Performance Tuning & Cost Optimization
 
 ## Tasks Completed
 
-1. **Created a Helm chart** from existing Kubernetes manifests under `charts/my-app/`.
-2. **Parameterized the Helm chart** using `values.yaml` to make the following configurable:
-   - Image repository and tag
-   - Container port
-   - Replica count
-   - Resource requests and limits
-   - Node affinity and tolerations
-   - Ingress configuration
-3. **Packaged and installed the Helm chart** using the command:
-
-   ```bash
-   helm upgrade --install my-app ./charts/my-app
-
-4. **Upgraded the deployment** via Helm to change the replica count or image tag, e.g.:
-
-    ```bash
-    helm upgrade --install my-app ./charts/my-app --set replicaCount=4 --set image.tag=v2.1
-
-## How to Install and Upgrade
-
-1. **Install the Helm Chart**
-
-    ```bash
-    helm upgrade --install my-app ./charts/my-app
-
-2. **Verify Deployment**
-
-    ```bash
-    kubectl get deployment my-app-my-app
-    kubectl get pods
-    kubectl describe deployment my-app-my-app
-
-## Core Concept Questions
-
-### 1. Why is Helm essential for managing configurations across multiple environments like development, staging, and production?
-
-In real-world scenarios, each environment often requires slight differences in configurations—such as replica counts, resource limits, or service URLs. Helm streamlines this complexity by allowing you to define a single chart template and override environment-specific values through separate `values.yaml` files or command-line parameters. This approach reduces human error, promotes consistency, and accelerates deployment workflows by avoiding the need to maintain multiple sets of nearly identical YAML manifests.
-
-**Use Case 1:**  
-Consider an e-commerce application that runs in both staging and production. The staging environment might use smaller resource limits and fewer replicas, while production requires high availability and autoscaling. Helm lets you manage these variations easily without duplicating manifests, ensuring deployments stay synchronized and easier to maintain.
+1. **Created a 2-tier Application**  
+   - Frontend and backend deployed using helm manifests with appropriate resource requests and limits.  
+2. **Implemented Probes**  
+   - Added liveness and readiness probes to ensure pod health and readiness before receiving traffic.  
+3. **Configured Horizontal Pod Autoscaler (HPA)**  
+   - Autoscaling based on CPU usage to handle variable workloads efficiently.  
+4. **Added Comments in Manifests**  
+   - Documented performance tuning and cost optimization considerations inline.
 
 ---
 
-### 2. How does Helm improve incident response by simplifying deployment rollback?
+## Optimization Strategies Used
 
-Helm versions each deployment as a "release" and keeps a history of these releases. If a newly deployed version introduces bugs or performance regressions, operators can use Helm's rollback feature to revert to a previous stable release with a single command. This drastically cuts down the time spent troubleshooting and reduces service downtime, enabling teams to maintain reliability and user trust.
+- **Resource Requests & Limits:**  
+  Defined CPU and memory requests to guarantee minimum resources and limits to prevent noisy neighbor effects, ensuring stable performance and avoiding over-provisioning costs.
 
-**Use Case 2:**  
-During a product update, a new microservice version causes unexpected crashes. Instead of manually modifying Kubernetes objects or redeploying old manifests, the team uses `helm rollback` to instantly restore the last working release, buying time to fix the issue without impacting users.
+- **Probes (Liveness & Readiness):**  
+  Implemented to maintain reliability by restarting unhealthy pods and controlling traffic flow only to healthy pods, reducing downtime and user-facing errors.
 
-## Screenshots of All Operations I did:
+- **Horizontal Pod Autoscaler (HPA):**  
+  Automatically scales pods out during peak loads (e.g., flash sales) and scales in during low usage periods, balancing user experience and infrastructure costs.
 
-1. **Helm Install Command Output:
+- **Efficient Image Usage:**  
+  Used minimal base images and multi-stage builds to reduce container image size, speeding up startup times and lowering storage costs.
 
-    - Screenshot of running and successfully installing my Chart:
-    ```bash
-    helm upgrade --install my-app ./charts/my-app
-    ```
+---
 
-    ![Helm Install](docker-k8s-workshop/day4/Screenshots/image.png)
+## URL Paths and Expected Responses
 
-2. **Kubectl Get All Resources Labeled**:
+| URL Path              | Service Type        | Expected Response                         |
+|-----------------------|---------------------|-------------------------------------------|
+| `http://<NodeIP>:30080` | NodePort            | Access to frontend landing or root endpoint    |
+| `http://<MinikubeIP>/myapp`  | Ingress (path-based) | Routes to frontend app, handles requests correctly |
+| `http://<MinikubeIP>/myapp/api`  | Backend API endpoint | Routes to backend API services |
 
-    ```bash
-    kubectl get all -l app.kubernetes.io/instance=my-app
-    ```
+---
 
-    ![K8s Resources](docker-k8s-workshop/day4/Screenshots/image1.png)
+## Core Concepts
 
-3. **Helm Templates**:
+### 1. Why are liveness and readiness probes critical in keeping a product’s user experience stable and reliable?  
+Liveness probes detect and restart pods that are stuck or unhealthy, preventing service degradation. Readiness probes ensure only healthy pods receive traffic, avoiding errors and downtime during deployments or pod restarts.
 
-    ![Helm Template](docker-k8s-workshop/day4/Screenshots/image3.png)
+**Real-world use case:**  
+In a payment processing service for an e-commerce platform, if a backend pod becomes unresponsive due to a deadlock or memory leak, the liveness probe will detect it and restart the pod automatically, avoiding prolonged service outages. Meanwhile, readiness probes prevent traffic from routing to pods still initializing or temporarily unhealthy, ensuring customers never face errors during checkout.
 
-4. **Helm Upgrade Command Output**
+### 2. How does Horizontal Pod Autoscaler (HPA) help in handling flash sales, seasonal load spikes, or traffic surges in real-world applications like an e-commerce platform?  
+HPA dynamically adjusts the number of pods based on resource usage, allowing the app to scale out during high demand and scale in when demand drops, ensuring availability and cost efficiency.
 
-    ```bash
-    helm upgrade my-app ./charts/my-app --set replicaCount=3 --set image.tag=1.1
-    ```
+**Real-world use case:**  
+During Black Friday flash sales, the frontend and backend services experience sudden spikes in traffic. HPA scales out the number of pods based on CPU or memory consumption, maintaining fast response times and uptime. When traffic returns to normal post-sale, HPA scales the pods back down to reduce cloud infrastructure costs.
 
-    ![Helm Upgrade](docker-k8s-workshop/day4/Screenshots/image2.png)
+---
 
-5. **Kubectl Get Deployment Showing Updated Replicas or Image**:
+## Screenshots
 
-    ```bash
-    kubectl get deployment my-app-my-app -o wide
-    ```
+1. **Scaling Event Screenshot**  
 
-    ![Deployment Update](docker-k8s-workshop/day4/Screenshots/image4.png)
-
-6. **Helm History**
-
-    ```bash
-    helm history my-app
-    ```
-
-    ![Helm History](docker-k8s-workshop/day4/Screenshots/image5.png)
+![Scaling Event](docker-k8s-workshop/day5/Screenshots/image.png)
